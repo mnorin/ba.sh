@@ -42,26 +42,26 @@ obj.class
 ```bash
 __OBJECT___properties=()
 
-fileName=0
-fileSize=1
-
 __OBJECT__.sayHello(){
     echo Hello
 }
 
 __OBJECT__.property(){
+    local fileName=0
+    local fileSize=1
+
     if [ "$2" == "=" ]
     then
 	  __OBJECT___properties[${!1}]="$3"
     else
-	  echo ${__OBJECT___properties[$1]}
+	  echo ${__OBJECT___properties[${!1}]}
     fi
 }
 
 __OBJECT__.fileName(){
     if [ "$1" == "=" ]
     then
-	  __OBJECT__.property fileName = $2
+	  __OBJECT__.property fileName = "$2"
     else
 	  __OBJECT__.property fileName
     fi
@@ -88,7 +88,7 @@ Here is what ba.sh implements:
 | __19 September 2015__ | One of the readers (kstn) writes articles [one](https://kstn-debian.livejournal.com/16601.html) and [two](https://kstn-debian.livejournal.com/16727.html), where he explores PoC and makes quoting fixes to improve work with properties that represent strings and creates a destructor (which might be useful when you have a lot of object to work with) |
 | __5 December 2016__ | Maxim Norin publishes examples as an answer to [this question](https://kstn-debian.livejournal.com/16727.html) about creating classes and objects on Stackoverflow |
 | __5 October 2019__ | Stackoverflow user TacB0sS adds an answer to the same question, telling that he implemented a terminal animation infrastructure using Maxim's pseudo-OOP concept (which looks pretty cool, by the way) |
-| __12 November 2025__ | Maxim implemented a zero-dependency constructor, which made ba.sh probably the only in the world fully bash-native framework with zero dependencies |
+| __12 November 2025__ | Maxim implemented a zero-dependency constructor, which made ba.sh probably the only in the world fully bash-native pseudo-OOP framework with zero dependencies |
 
 Since the very first implementation of PoC ba.sh didn't change much.
 
@@ -295,13 +295,13 @@ Property methods (e.g. `obj.fileName()`) call the generic `obj.property()` inste
 Bash 3 implementation:
 
 ```bash
-# Property IDs for indexed arrays
-title=0
-description=1
-
 obj_properties=()  # Indexed array
 
 obj.property(){
+    # Property IDs for indexed arrays
+    title=0
+    description=1
+
     if [ "$2" == "=" ]; then
         obj_properties[$1]="$3"  # $1 is property ID (0, 1, etc)
     else
@@ -323,7 +323,7 @@ Note: In bash array subscripts, variables are evaluated automatically. Both [$ti
 Bash 4 implementation:
 
 ```bash
- No property IDs needed!
+# No property IDs needed!
 declare -A obj_properties  # Associative array
 
 obj.property(){
@@ -405,13 +405,20 @@ The first person who implemented destructor was kstn.
 
 What descructor looks like:
 ```bash
-obj.destroy(){
+__OBJECT__.destroy(){
     unset __OBJECT___properties
     unset -f __OBJECT__.filename __OBJECT__.property
 }
 ```
 And this is it.
 
+# Bundling
+
+When you develop multi-file application, you may want to eventually create a single application file that will contain all the code, including class definitions. This can be easily done with another script, let's call it a bundler.
+
+What you essentially need to do is add every class you use, then add all constructors, and the the application code, which can be automated with bash obviously.
+
+... To be continued
 
 # Best practices and recommendations
 
@@ -427,18 +434,22 @@ Instead of creating one constructor per class, add them all in one file, call it
 ```bash
 . mylib.h
 ```
-It will make all you classes available all at once, but it obviously won't add any class code into surrent shell environment, it will only happen when object is instantiated.
+It will make all you classes available all at once, but it obviously won't add any class code into current shell environment, it will only happen when object is instantiated.
 
 ## 3. If you don't need data validation in setters and defaults in getters, use simplified property generation
 
 ```bash
 for property_name in "name" "weight" "color"
 do
-  __OBJECT.${property_name}(){
-    obj.property "${property_name}" "$1" "$2"
+  __OBJECT__.${property_name}(){
+    __OBJECT__.property "${property_name}" "$1" "$2"
   }
 done
 ```
-or something similar. It will reduce manual boilerplate. Then you can redefine whatever getters/setters you actually need to be more complicated.
+or something similar. It will reduce manual boilerplate when put after `__OBJECT__.property()`. This code will be executed once, when object is instantiated. Then you can redefine whatever getters/setters you actually need to be more complicated. This will effectively override existing property methods.
 
 ... To be continued...
+
+# Q&A
+
+## TBD
