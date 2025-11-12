@@ -344,6 +344,23 @@ obj.title(){
 }
 ```
 
+Even better option is to store property name variables inside the data abstraction layer like this:
+```bash
+obj_properties=()  # Indexed array
+
+obj.property(){
+    # Property IDs for indexed arrays
+    local title=0
+    local description=1
+
+    if [ "$2" == "=" ]; then
+        obj_properties[$1]="$3"  # $1 is property ID (0, 1, etc)
+    else
+        echo ${obj_properties[${!1}]}
+    fi
+}
+```
+
 For migration from bash 3 to bash 4 you need to do to exactly three things:
 1. Array declaration `obj_properties=()` -> `declare -A obj_properties`
 2. Storage access in `obj.property()`: add quotes for associative array keys
@@ -411,5 +428,17 @@ Instead of creating one constructor per class, add them all in one file, call it
 . mylib.h
 ```
 It will make all you classes available all at once, but it obviously won't add any class code into surrent shell environment, it will only happen when object is instantiated.
+
+## 3. If you don't need data validation in setters and defaults in getters, use simplified property generation
+
+```bash
+for property_name in "name" "weight" "color"
+do
+  __OBJECT.${property_name}(){
+    obj.property "${property_name}" "$1" "$2"
+  }
+done
+```
+or something similar. It will reduce manual boilerplate. Then you can redefine whatever getters/setters you actually need to be more complicated.
 
 ... To be continued...
