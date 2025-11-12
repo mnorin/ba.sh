@@ -344,7 +344,7 @@ obj.title(){
 }
 ```
 
-For migration from bash 3 to bash 4 you need to do to exactly two things:
+For migration from bash 3 to bash 4 you need to do to exactly three things:
 1. Array declaration `obj_properties=()` -> `declare -A obj_properties`
 2. Storage access in `obj.property()`: add quotes for associative array keys
 3. Remove variables named as properties that keep indexes of the said properties
