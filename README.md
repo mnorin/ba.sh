@@ -111,8 +111,8 @@ There are other bash pseudo-OOP frameworks that add ability to use object repres
 
 ba.sh goes down to OOP concept itself and implements visually nice pseudo-OOP without mocking other OOP-languages, everything work inside the frame of bash limitations, and using native functionality. It works with bash instead of fighting it.
 
-It give ba.sh these advantages:
-- Compatible with bash 3 and 4+ (via storage abstraction layer, see below)
+It gives ba.sh these advantages:
+- Compatible with bash 3 and 4+ (via storage abstraction layer and compatibility layer, see below)
 - Incredibly small code footprint
 - Bash native performance (zero runtime overhead)
 
