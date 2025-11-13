@@ -54,9 +54,9 @@ __OBJECT__.property(){
 
     if [ "$2" == "=" ]
     then
-	  __OBJECT___properties[${!1}]="$3"
+	  __OBJECT___properties[$1]="$3"
     else
-	  echo ${__OBJECT___properties[${!1}]}
+	  echo ${__OBJECT___properties[$1]}
     fi
 }
 
