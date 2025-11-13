@@ -395,11 +395,11 @@ obj(){
 ```
 It's a bit more code, but now it's as native as possible. In terms of performance, you can do some tests if you use a lot of objects, but on small number of objects difference is negligible, so it's more like a trade-off. You can pick either smaller code or full independence.
 
-Why "printf" and not "echo"? Echo has some side effects, such as replacing ends of line with spaces, for example, or interpreting some characters. It can affect modified code and break it, and what we need is the exact file content.
+Why "printf" and not "echo"? Echo has some side effects, such as replacing ends of line with spaces, for example, or interpreting some characters. Even though it might be useful to exploit this side effect in some cases, it can affect modified code and break it, and what we need is the exact file content.
 
 ## Zero dependency constructor in bash 3
 
-The main problem here is that that code above won't work for bash 3. In case of bash 3 zero dependency constructor wil look like this:
+The main problem here is that that code above won't work for bash 3. In case of bash 3 zero dependency constructor will look like this:
 ```bash
 obj () 
 {
@@ -409,7 +409,7 @@ obj ()
 }
 ```
 
-I don't like eval much and try to avoid it as much as possible, but for bash 3 it seems to be the only solution. Considering we know what's inside class files, security concerns should be low in this specific case. Also, it's an internal command, so still helps to exclude external dependencies.
+I don't like eval much and usually try to avoid it, but for bash 3 it seems to be the only solution. Considering we know what's inside class files, security concerns should be low in this specific case. Also, it's an internal command, so still helps to exclude external dependencies.
 
 And if we dive deeper into eval-based constructor (bash 3-compatible), this is where things get interesting. Let's have a look at performance test results.
 
@@ -563,7 +563,7 @@ So, as you can see, the best compatibility option is also the fastest. If you wa
 
 When eval-based constructor used, risks are not that high in this specific case, unless you don't control class files content. If all classes either written by you or verified, you are probably good to go.
 
-If you want to run you scripts on both bash 3 and 4+, you will need to implement a compatibility layer for constructors that will look like this:
+If you want to run you scripts on both bash 3 and 4+ with the safest option available for each of these versions, you will need to implement a compatibility layer for constructors that will look like this:
 ```bash
 # File compatibility.h
 # 1. Determine the environment
@@ -607,7 +607,7 @@ matrix m1
 # ...
 ```
 
-Compatibility layer can be used for other things as well. In this case application level is prefered, as it requires sourcing just once. The whole idea is to keep the same interface, providing functions that do the same with functionality adjusted to specific bash version. The same, but different, but the same.
+Compatibility layer can be used for other things as well. In this case application level is prefered, as it requires sourcing just once. The whole idea is to keep the same interface, providing functions that do the same with functionality adjusted to specific bash version on lower level. The same, but different, but the same.
 
 Zero dependency constructor is considered the primary option, sed constructor is secondary. Make your decision during implementation. Zero-dependency constructor might be faster in most cases, but when it requires hundreds or thousands of objects, you may want to run some benchmarks.
 
@@ -692,4 +692,28 @@ or something similar. It will reduce manual boilerplate when put after `__OBJECT
 
 # Q&A
 
-## TBD
+## Why not just use Python?
+
+For a number of reasons:
+1. Overhead might be too high
+2. Python libraries tend to get outdated much faster than bash scripts
+3. Limited environment (no external programs possible to install or disk space is limited, for example)
+4. You have a big project written in bash and all you need is just a bit better organisation. In this case using ba.sh you can improve code base in small iterations, and may be later migrate to python if you want.
+
+## Is this production-ready?
+
+Probably. It's not very different from many other bash scripts people use in production. I can't guarantee anything though. Use it at your own risk.
+
+## How do I handle errors?
+
+... TBD (there will be an example or two here)
+
+## Can I serialize object state?
+
+Yes, you can. How you do it is another question, but ba.sh doesn't stop you from implementing a method ".serialize" that will just dump properties array in a convenient form and method ".deserialize" that will load those values into a properties array. Implementation details have nothing to do with ba.sh though, it just adds organisation, you are free to it how you like.
+
+## When should I use destructors?
+
+It's basically two cases:
+1. You create enormous number of objects for some reason (in a loop, for example) and those objects are short-lived
+2. You have strict memory restrictions (normally not the case these days, even routers have enough memory to ignore destructors under normal work conditions).
