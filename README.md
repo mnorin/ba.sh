@@ -6,6 +6,8 @@ ba.sh is the only bash-native OOP framework with zero dependencies and zero runt
 
 Technically it may be considered a framework and a design pattern at the same time.
 
+Disclaimer: Some examples may not work on bash 3, because I just don't have Mac and running bash 3 in Docker container is tedious. So, if something doesn't work, just raise an issue in Github.
+
 Before I start explaining, let's see an example of a script that uses ba.sh
 
 example.sh
@@ -85,7 +87,7 @@ Here is what ba.sh implements:
 | Date | Event |
 | --- | --- |
 | __2 November 2013__ | Maxim Norin (me) implemented PoC just for fun and [the article](https://mnorin.com/ob-ektno-orientirovannoe-programmirovanie-na-bash.html) was written explaining what it does and how it works. |
-| __19 September 2015__ | One of the readers (kstn) writes articles [one](https://kstn-debian.livejournal.com/16601.html) and [two](https://kstn-debian.livejournal.com/16727.html), where he explores PoC and makes quoting fixes to improve work with properties that represent strings and creates a destructor (which might be useful when you have a lot of object to work with) |
+| __19 September 2015__ | One of the readers (kstn) writes articles [one](https://kstn-debian.livejournal.com/16601.html) and [two](https://kstn-debian.livejournal.com/16727.html), where he explores PoC and makes quoting fixes to improve work with properties that represent strings and creates a destructor (which might be useful when you have a lot of objects to work with) |
 | __5 December 2016__ | Maxim Norin publishes examples as an answer to [this question](https://kstn-debian.livejournal.com/16727.html) about creating classes and objects on Stackoverflow |
 | __5 October 2019__ | Stackoverflow user TacB0sS adds an answer to the same question, telling that he implemented a terminal animation infrastructure using Maxim's pseudo-OOP concept (which looks pretty cool, by the way) |
 | __12 November 2025__ | Maxim implemented a zero-dependency constructor, which made ba.sh probably the only in the world fully bash-native pseudo-OOP framework with zero dependencies |
@@ -105,7 +107,7 @@ This is like Unix philosophy applied to OOP: simple parts, clear purposes, compo
 
 Obviously, there are no real objects or classes possible in bash.
 
-The are other bash pseudo-OOP frameworks that add ability to use object representations. But many of them try to mock object-oriented programming languages.
+There are other bash pseudo-OOP frameworks that add ability to use object representations. But many of them try to mock object-oriented programming languages.
 
 ba.sh goes down to OOP concept itself and implements visually nice pseudo-OOP without mocking other OOP-languages, everything work inside the frame of bash limitations, and using native functionality. It works with bash instead of fighting it.
 
@@ -224,7 +226,7 @@ myobject.display(){
 myobject.display  # New implementation
 ```
 
-In bash when you define a function with the same as an existing one, it replaces the previous definition. This is not a bug, it's a feature, it enables polymorphism and runtime customisation.
+In bash when you define a function with the same name as an existing one, it replaces the previous definition. This is not a bug, it's a feature, it enables polymorphism and runtime customisation.
 
 # Design decisions & Philosophy
 
@@ -250,7 +252,7 @@ Reasoning:
 - Simpler mental model
 - Sufficient for bash's use cases (remember, it's not a general purpose language)
 - This avoids complexity of true inheritance
-- More appropriate fo bash's capabilities
+- More appropriate for bash's capabilities
 
 ## Weak incapsulation
 
@@ -393,6 +395,64 @@ obj(){
 ```
 It's a bit more code, but now it's as native as possible. In terms of performance, you can do some tests if you use a lot of objects, but on small number of objects difference is negligible, so it's more like a trade-off. You can pick either smaller code or full independence.
 
+## Zero dependency constructor in bash 3
+
+The main problem here is that that code above won't work for bash 3. In case of bash 3 zero dependency constructor wil look like this:
+```bash
+obj () 
+{
+    local class_code=$(<obj.class);
+    local generated_code="${class_code//obj/$1}";
+    eval "$generated_code"
+}
+```
+
+I don't like eval and try to avoid it as much as possible, but for bash 3 it seems to be the only solution. Considering we know what's inside class files, security concerns should be low in this specific case. Also, it's an internal command, so still helps to exclude external dependencies.
+
+If you want to run you scripts on both bash 3 and 4+, you will need to implement a compatibility layer for constructors that will look like this:
+```bash
+# File compatibility.h
+# 1. Determine the environment
+BASH_MAJOR_VERSION=${BASH_VERSION%%.*}
+
+# 2. Define the core code execution function only once
+if [[ "$BASH_MAJOR_VERSION" -ge 4 ]]; then
+    _source_code() {
+        # Bash 4.0+ method
+        . <(printf '%s' "$1")
+    }
+else
+    _source_code() {
+        # The necessary, reliable Bash 3.x 'eval' workaround
+        eval "$1"
+    }
+fi
+```
+
+And then in a constructor you can just call `_source_code()`
+```bash
+. compatibility.h
+matrix() {
+    local class_code=$(<matrix.class);
+    local generated_code="${class_code//matrix/$1}";
+    
+    # Use the function defined in compatibility.h
+    _source_code "$generated_code" 
+}
+```
+
+And, of course, there is always an option when you use compatibility layer on the application level. This might be more convenient, because you only need to source it once.
+Example:
+```bash
+#!/bin/bash
+# Source the compatibility file first.
+. compatibility.h
+
+. matrix.h
+matrix m1
+# ...
+```
+
 Zero dependency constructor is considered the primary option, sed constructor is secondary. Make your decision during implementation. Zero-dependency constructor might be faster in most cases, but when it requires hundreds of objects, you may want to run some benchmarks.
 
 It would be also good to consider destructors if that's the case.
@@ -422,7 +482,7 @@ What you essentially need to do is add every class you use, then add all constru
 
 # Best practices and recommendations
 
-## 1. Use longer placeholders in class files
+## 1. Use longer and/or more unique placeholders in class files
 
 Instead of "obj" use something like `__OBJECT__` or `__CLASS_NAME__` to avoid substring collisions. Short names look nicer, but they might be a part of something else rather than what you want it to be.
 
