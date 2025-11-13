@@ -453,6 +453,8 @@ matrix m1
 # ...
 ```
 
+Compatibility layer can be used for other things as well. In this case application level is prefered, as it requires sourcing just once. The whole idea is to keep the same interface, providing functions that do the same with functionality adjusted to specific bash version. The same, but different, but the same.
+
 Zero dependency constructor is considered the primary option, sed constructor is secondary. Make your decision during implementation. Zero-dependency constructor might be faster in most cases, but when it requires hundreds of objects, you may want to run some benchmarks.
 
 It would be also good to consider destructors if that's the case.
@@ -471,6 +473,30 @@ __OBJECT__.destroy(){
 }
 ```
 And this is it.
+
+# Static classes (utility classes)
+
+You dont always want to create an object instance for everything. The best part about classes is that they have data and methods that work with this data. But when you don't really have data to work with, then you don't really need an instance.
+
+Here is how you create a static class:
+
+File system.h
+```bash
+. system.class
+```
+
+File system.class
+```bash
+system.stdout.printValue(){
+    echo $($@)
+}
+
+system.stdout.printString(){
+    echo $@
+}
+```
+
+As you can see, header file only has sourcing, so code gets added as-is, without creating an isolated namespace.
 
 # Bundling
 
