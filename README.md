@@ -358,7 +358,7 @@ obj.property(){
     if [ "$2" == "=" ]; then
         obj_properties[$1]="$3"  # $1 is property ID (0, 1, etc)
     else
-        echo ${obj_properties[${!1}]}
+        echo ${obj_properties[$1]}
     fi
 }
 ```
