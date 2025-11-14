@@ -659,7 +659,7 @@ As you can see, header file only has sourcing, so code gets added as-is, without
 
 When you develop multi-file application, you may want to eventually create a single application file that will contain all the code, including class definitions. This can be easily done with another script, let's call it a bundler.
 
-What you essentially need to do is add every class you use, then add all constructors, and the the application code, which can be automated with bash obviously.
+What you essentially need to do is add every class you use, then add all constructors, and then the application code, which can be automated with bash obviously.
 
 ... To be continued
 
@@ -727,7 +727,7 @@ mytask.priority = 5 || {
 
 ## Can I serialize object state?
 
-Yes, you can. How you do it is another question, but ba.sh doesn't stop you from implementing a method ".serialize" that will just dump properties array in a convenient form and method ".deserialize" that will load those values into a properties array. Implementation details have nothing to do with ba.sh though, it just adds organisation, you are free to it how you like.
+Yes, you can. How you do it is another question, but ba.sh doesn't stop you from implementing a method ".serialize" that will just dump properties array in a convenient form and method ".deserialize" that will load those values into a properties array. Implementation details have nothing to do with ba.sh though, it just adds organisation, you are free to do it how you like.
 
 ## When should I use destructors?
 
