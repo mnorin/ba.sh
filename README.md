@@ -209,7 +209,7 @@ obj(){
 }
 ```
 
-This way your object first inherit all parent's methods, and then object's own methods will be added.
+This way your object first inherits all parent's methods, and then object's own methods will be added.
 
 ## 6. Method overriding
 
@@ -302,8 +302,8 @@ obj_properties=()  # Indexed array
 
 obj.property(){
     # Property IDs for indexed arrays
-    title=0
-    description=1
+    local title=0
+    local description=1
 
     if [ "$2" == "=" ]; then
         obj_properties[$1]="$3"  # $1 is property ID (0, 1, etc)
@@ -321,7 +321,7 @@ obj.title(){
     fi
 }
 ```
-Note: In bash array subscripts, variables are evaluated automatically. Both [$title] and [title] work (title=0), though [$title] is more explicit.
+Note: In bash array subscripts, variables are evaluated automatically. Both [$title] and [title] work (title=0), though [$title] is more explicit. Also, in an arithmetic context (like array index) variable name might be resolved to its value (this is also why you should check if your variables shadowed properly where needed).
 
 Bash 4 implementation:
 
@@ -347,7 +347,7 @@ obj.title(){
 }
 ```
 
-Even better option is to store property name variables inside the data abstraction layer like this:
+Even better option when using non-associative arrays (meaning bash 3 or just an array in bash 4+) is to store property name variables inside the data abstraction layer like this:
 ```bash
 obj_properties=()  # Indexed array
 
@@ -396,7 +396,7 @@ obj(){
 ```
 It's a bit more code, but now it's as native as possible. In terms of performance, you can do some tests if you use a lot of objects, but on small number of objects difference is negligible, so it's more like a trade-off. You can pick either smaller code or full independence.
 
-Why "printf" and not "echo"? Echo has some side effects, such as replacing ends of line with spaces, for example, or interpreting some characters. Even though it might be useful to exploit this side effect in some cases, it can affect modified code and break it, and what we need is the exact file content.
+Why "printf" and not "echo"? Echo has some side effects, such as replacing ends of lines with spaces, for example, or interpreting some characters. Even though it might be useful to exploit this side effect in some cases (like using double echo for string concatenation), it can affect modified code and break it, and what we need is the exact file content.
 
 ## Zero dependency constructor in bash 3
 
@@ -587,6 +587,8 @@ fi
 And then in a constructor you can just call `_source_code()`
 ```bash
 . compatibility.h
+# Yes, I created an easy to use 2-dimensional
+# array in bash using ba.sh
 matrix() {
     local class_code=$(<matrix.class);
     local generated_code="${class_code//matrix/$1}";
@@ -651,7 +653,7 @@ system.stdout.printString(){
 }
 ```
 
-As you can see, header file only has sourcing, so code gets added as-is, without creating an isolated namespace.
+As you can see, header file only has sourcing, so code gets added as-is, without creating an isolated namespace. Technically you can just source this class file wherether you want, don't even have to have a constructor file.
 
 # Bundling
 
