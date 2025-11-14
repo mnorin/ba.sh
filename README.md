@@ -151,7 +151,7 @@ __OBJECT__.priority(){
             echo "Error: Priority must be 1-5" >&2
             return 1
         fi
-        __OBJECT__.property "priority" = "$2"
+        __OBJECT__.property priority = "$2"
     else
         local value=$(__OBJECT__.property "priority")
         echo "${value:-3}" # Default value when property is not set
@@ -410,7 +410,7 @@ obj ()
 }
 ```
 
-I don't like eval much and usually try to avoid it, but for bash 3 it seems to be the only solution. Considering we know what's inside class files, security concerns should be low in this specific case. Also, it's an internal command, so still helps to exclude external dependencies.
+I generally avoid eval, but for bash 3 it seems to be the only solution. Considering we know what's inside class files, security concerns should be low in this specific case. Also, it's an internal command, so still helps to exclude external dependencies.
 
 And if we dive deeper into eval-based constructor (bash 3-compatible), this is where things get interesting. Let's have a look at performance test results.
 
@@ -562,7 +562,7 @@ Recommendation for bash 3:
 
 So, as you can see, the best compatibility option is also the fastest. If you want a more secure option in bash 4+, use zero dependency constructor with "printf", if you want the best performance you can get, use bash 3-compatible eval-based version.
 
-When eval-based constructor used, risks are not that high in this specific case, unless you don't control class files content. If all classes either written by you or verified, you are probably good to go.
+When eval-based constructor used, risks are not that high in this specific case, unless you don't control class files content. If all classes are either written by you or verified, you should be safe.
 
 If you want to run you scripts on both bash 3 and 4+ with the safest option available for each of these versions, you will need to implement a compatibility layer for constructors that will look like this:
 ```bash
@@ -709,7 +709,21 @@ Probably. It's not very different from many other bash scripts people use in pro
 
 ## How do I handle errors?
 
-... TBD (there will be an example or two here)
+Property setters return non-zero on validation failure:
+```bash
+if ! mytask.priority = 10; then
+    echo "Failed to set priority" >&2
+    exit 1
+fi
+```
+
+Or capture and check:
+```bash
+mytask.priority = 5 || {
+    echo "Invalid priority"
+    # Handle error
+}
+```
 
 ## Can I serialize object state?
 
