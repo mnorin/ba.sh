@@ -1,0 +1,172 @@
+# matrix.class - 2D Array implementation
+
+__OBJECT___rows=0
+__OBJECT___cols=0
+__OBJECT___initialized=0
+
+__OBJECT__.setSize(){
+    local rows="$1"
+    local cols="$2"
+    
+    if [ -z "$rows" ] || [ -z "$cols" ]; then
+        echo "Error: setSize requires rows and cols" >&2
+        return 1
+    fi
+    
+    if [ $rows -le 0 ] || [ $cols -le 0 ]; then
+        echo "Error: Size must be positive" >&2
+        return 1
+    fi
+    
+    __OBJECT___rows=$rows
+    __OBJECT___cols=$cols
+    __OBJECT___initialized=1
+    
+    # Create row arrays dynamically
+    for i in $(seq 0 $((rows-1))); do
+        eval "__OBJECT___row_$i=()"
+    done
+}
+
+__OBJECT__.set(){
+    local row=$1
+    local col=$2
+    local value=$3
+    
+    if [ $__OBJECT___initialized -eq 0 ]; then
+        echo "Error: Matrix not initialized. Call setSize first." >&2
+        return 1
+    fi
+    
+    if [ -z "$row" ] || [ -z "$col" ]; then
+        echo "Error: set requires row, col, and value" >&2
+        return 1
+    fi
+    
+    # Bounds checking
+    if [ $row -lt 0 ] || [ $row -ge $__OBJECT___rows ]; then
+        echo "Error: Row $row out of bounds (0-$((__OBJECT___rows-1)))" >&2
+        return 1
+    fi
+    
+    if [ $col -lt 0 ] || [ $col -ge $__OBJECT___cols ]; then
+        echo "Error: Col $col out of bounds (0-$((__OBJECT___cols-1)))" >&2
+        return 1
+    fi
+    
+    eval "__OBJECT___row_${row}[$col]=\"$value\""
+}
+
+__OBJECT__.get(){
+    local row=$1
+    local col=$2
+    
+    if [ $__OBJECT___initialized -eq 0 ]; then
+        echo "Error: Matrix not initialized" >&2
+        return 1
+    fi
+    
+    if [ -z "$row" ] || [ -z "$col" ]; then
+        echo "Error: get requires row and col" >&2
+        return 1
+    fi
+    
+    # Bounds checking
+    if [ $row -lt 0 ] || [ $row -ge $__OBJECT___rows ]; then
+        echo "Error: Row $row out of bounds" >&2
+        return 1
+    fi
+    
+    if [ $col -lt 0 ] || [ $col -ge $__OBJECT___cols ]; then
+        echo "Error: Col $col out of bounds" >&2
+        return 1
+    fi
+    
+    local row_name="__OBJECT___row_${row}[$col]"
+    eval echo "\${$row_name}"
+}
+
+__OBJECT__.getSize(){
+    echo "${__OBJECT___rows}x${__OBJECT___cols}"
+}
+
+__OBJECT__.fill(){
+    local value="$1"
+    
+    if [ $__OBJECT___initialized -eq 0 ]; then
+        echo "Error: Matrix not initialized" >&2
+        return 1
+    fi
+    
+    for i in $(seq 0 $((__OBJECT___rows-1))); do
+        for j in $(seq 0 $((__OBJECT___cols-1))); do
+            eval "__OBJECT___row_${i}[$j]=\"$value\""
+        done
+    done
+}
+
+__OBJECT__.display(){
+    if [ $__OBJECT___initialized -eq 0 ]; then
+        echo "Error: Matrix not initialized" >&2
+        return 1
+    fi
+    
+    echo "Matrix [${__OBJECT___rows}x${__OBJECT___cols}]:"
+    for i in $(seq 0 $((__OBJECT___rows-1))); do
+        echo -n "  Row $i: "
+        for j in $(seq 0 $((__OBJECT___cols-1))); do
+            local row_name="__OBJECT___row_${i}[$j]"
+            local value=$(eval echo "\${$row_name}")
+            printf "%5s " "${value:-.}"
+        done
+        echo ""
+    done
+}
+
+__OBJECT__.displayCompact(){
+    if [ $__OBJECT___initialized -eq 0 ]; then
+        echo "Error: Matrix not initialized" >&2
+        return 1
+    fi
+    
+    for i in $(seq 0 $((__OBJECT___rows-1))); do
+        for j in $(seq 0 $((__OBJECT___cols-1))); do
+            local row_name="__OBJECT___row_${i}[$j]"
+            local value=$(eval echo "\${$row_name}")
+            printf "%s " "${value:-.}"
+        done
+        echo ""
+    done
+}
+
+__OBJECT__.getRow(){
+    local row=$1
+    
+    if [ $__OBJECT___initialized -eq 0 ]; then
+        echo "Error: Matrix not initialized" >&2
+        return 1
+    fi
+    
+    if [ $row -lt 0 ] || [ $row -ge $__OBJECT___rows ]; then
+        echo "Error: Row $row out of bounds" >&2
+        return 1
+    fi
+    
+    eval "echo \"\${__OBJECT___row_${row}[@]}\""
+}
+
+__OBJECT__.clear(){
+    if [ $__OBJECT___initialized -eq 0 ]; then
+        return 0
+    fi
+    
+    # Unset all row arrays
+    for i in $(seq 0 $((__OBJECT___rows-1))); do
+        eval "unset __OBJECT___row_$i"
+    done
+    
+    __OBJECT___rows=0
+    __OBJECT___cols=0
+    __OBJECT___initialized=0
+}
+
