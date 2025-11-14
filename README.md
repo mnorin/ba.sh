@@ -151,9 +151,10 @@ __OBJECT__.priority(){
             echo "Error: Priority must be 1-5" >&2
             return 1
         fi
-        __OBJECT___properties[$priority]="$2"
+        __OBJECT__.property "priority" = "$2"
     else
-        echo "${__OBJECT___properties[$priority]:-3}"
+        local value=$(__OBJECT__.property "priority")
+        echo "${value:-3}" # Default value when property is not set
     fi
 }
 ```
