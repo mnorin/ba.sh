@@ -8,6 +8,21 @@ Technically it may be considered a framework and a design pattern at the same ti
 
 Disclaimer: Some examples may not work on bash 3, because I just don't have Mac and running bash 3 in Docker container is tedious. So, if something doesn't work, just raise an issue in Github.
 
+---
+## Table of content
+1. [Introduction](#introduction)
+2. [History](#history)
+3. [Concepts](#concepts)
+4. [Design decisions & Philosophy](#design-decisions--philosophy)
+5. [The Storage Abstraction Layer](#the-storage-abstraction-layer)
+6. [Zero Dependency Constructor](#zero-dependency-constructor)
+7. [Destructors](#destructors)
+8. [Static classes (utility classes)](#static-classes-utility-classes)
+9. [Bundling](#bundling)
+10. [Best practices and recommendations](#best-practices-and-recommendations)
+11. [Q&A](#qa)
+---
+
 ## Introduction
 
 Before I start explaining, let's see an example of a script that uses ba.sh
