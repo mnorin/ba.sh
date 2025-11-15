@@ -107,7 +107,7 @@ Here is what ba.sh implements:
 | __19 January 2015__ | One of the readers (kstn) writes articles [one](https://kstn-debian.livejournal.com/16601.html) and [two](https://kstn-debian.livejournal.com/16727.html), where he explores PoC and makes quoting fixes to improve work with properties that represent strings and creates a destructor (which might be useful when you have a lot of objects to work with) |
 | __5 December 2016__ | Maxim Norin publishes examples as an answer to [this question](https://kstn-debian.livejournal.com/16727.html) about creating classes and objects on Stackoverflow |
 | __5 October 2019__ | Stackoverflow user TacB0sS adds an answer to the same question, telling that he implemented a terminal animation infrastructure using Maxim's pseudo-OOP concept (which looks pretty cool, by the way) |
-| __12 November 2025__ | Maxim implemented a zero-dependency constructor, which made ba.sh probably the only in the world fully bash-native pseudo-OOP framework with zero dependencies |
+| __12 November 2025__ | Maxim implemented a zero-dependency constructor, which made ba.sh probably the only in the world fully bash-native pseudo-OOP framework with zero dependencies that is compatible with bash 3 and 4+ |
 
 Since the very first implementation of PoC ba.sh didn't change much.
 
