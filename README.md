@@ -734,3 +734,20 @@ Yes, you can. How you do it is another question, but ba.sh doesn't stop you from
 It's basically two cases:
 1. You create enormous number of objects for some reason (in a loop, for example) and those objects are short-lived
 2. You have strict memory restrictions (normally not the case these days, even routers have enough memory to ignore destructors under normal work conditions).
+
+## What's the best way to debug and/or test a class?
+
+The best way is to treat a class file like a regular bash script (which it actually is, very likely shellcheck will be fine with it).
+
+You can either source it in your current shell to get `__OBJECT__<whatever>` in your current shell (which is probably easier), or just make it executable, add shabang in the first line ("#!/usr/bin/env bash"), set executable flag and stick your test/debug code after all the definitions. You don't have to instantiate an object.
+
+Or even better:
+
+```bash
+#!/usr/bin/env bash
+
+# My test suite in the file named "myclass.test.sh"
+. myclass.class
+
+# ... Some unit tests here
+```
