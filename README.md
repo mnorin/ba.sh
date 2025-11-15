@@ -682,6 +682,8 @@ What you essentially need to do is add every class you use, then add all constru
 
 ## Best practices and recommendations
 
+Generally bash scripting best practices apply to ba.sh as well, but there are some more specific to ba.sh.
+
 ### 1. Use longer and/or more unique placeholders in class files
 
 Instead of "obj" use something like `__OBJECT__` or `__CLASS_NAME__` to avoid substring collisions. Short names look nicer, but they might be a part of something else rather than what you want it to be.
@@ -707,8 +709,6 @@ do
 done
 ```
 or something similar. It will reduce manual boilerplate when put after `__OBJECT__.property()`. This code will be executed once, when object is instantiated. Then you can redefine whatever getters/setters you actually need to be more complicated. This will effectively override existing property methods.
-
-... To be continued...
 
 ## Q&A
 
