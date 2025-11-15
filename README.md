@@ -8,6 +8,8 @@ Technically it may be considered a framework and a design pattern at the same ti
 
 Disclaimer: Some examples may not work on bash 3, because I just don't have Mac and running bash 3 in Docker container is tedious. So, if something doesn't work, just raise an issue in Github.
 
+## Introduction
+
 Before I start explaining, let's see an example of a script that uses ba.sh
 
 example.sh
@@ -82,7 +84,7 @@ Here is what ba.sh implements:
 5. Opportunities to include validations for data integrity into property setter
 6. ... Some other things
 
-# History
+## History
 
 | Date | Event |
 | --- | --- |
@@ -103,7 +105,7 @@ The Philosophy behind ba.sh:
 
 This is like Unix philosophy applied to OOP: simple parts, clear purposes, compose well.
 
-# Concepts
+## Concepts
 
 Obviously, there are no real objects or classes possible in bash.
 
@@ -116,11 +118,11 @@ It gives ba.sh these advantages:
 - Incredibly small code footprint
 - Bash native performance (zero runtime overhead)
 
-## 1. Encapsulation
+### 1. Encapsulation
 
 ba.sh implements a weak incapsulation based on namespacing. When object is created, it generates an array to store properties values and a set of functions with the same namespace that look like methods (thanks to dot notation).
 
-## 2. Instance isolation
+### 2. Instance isolation
 
 Each object has its own state, independent of other objects.
 
@@ -138,7 +140,7 @@ object2.fileName # prints "2.txt"
 
 This is achieved with having a unique state array for each object that uses object's namespace.
 
-## 3. Property validation
+### 3. Property validation
 
 You can control access to data and enforce invariants.
 
@@ -167,7 +169,7 @@ Each property accessor is a gateway to the data. This provides:
 
 Technically you can bypass validation simply writing to the object property array, but this is due global nature of bash environment. No complex limitation implemented, and it's a consious decision. It's a convention, and you can choose to follow it or not (it's better to follow if you want your code to do exactly what you want it to do).
 
-## 4. Method dispatch
+### 4. Method dispatch
 
 Technically it's just calling behaviour on specific instances.
 
@@ -179,7 +181,7 @@ task2.display
 
 This works, because function with object-related unique name is executed and it accesses property storage specific to object's namespace.
 
-## 5. Composition
+### 5. Composition
 
 Ability to combine methods from different classes in one object.
 
@@ -211,7 +213,7 @@ obj(){
 
 This way your object first inherits all parent's methods, and then object's own methods will be added.
 
-## 6. Method overriding
+### 6. Method overriding
 
 Method implementation can be performed either via composition or at runtime.
 
@@ -229,9 +231,9 @@ myobject.display  # New implementation
 
 In bash when you define a function with the same name as an existing one, it replaces the previous definition. This is not a bug, it's a feature, it enables polymorphism and runtime customisation.
 
-# Design decisions & Philosophy
+## Design decisions & Philosophy
 
-## No explicit constructors with parameters
+### No explicit constructors with parameters
 
 Reasoning:
 - More explicit and readable
@@ -239,7 +241,7 @@ Reasoning:
 - More flexible (set only what you need)
 - Clearer intent
 
-## No destructors
+### No destructors
 
 Reasoning:
 - Scripts are typically short-lived
@@ -247,7 +249,7 @@ Reasoning:
 - Avoids complexity for rarely-needed feature
 - Easy to implement if needed (kstn demonstrated an example), so users can add their own destructor when needed
 
-## Composition over inheritance
+### Composition over inheritance
 
 Reasoning:
 - Simpler mental model
@@ -255,7 +257,7 @@ Reasoning:
 - This avoids complexity of true inheritance
 - More appropriate for bash's capabilities
 
-## Weak incapsulation
+### Weak incapsulation
 
 What you can do:
 ```bash
@@ -268,7 +270,7 @@ Why allow this:
 - Bash's global namespace makes true privacy impractical, no reason to fight the language, embrace it
 - Respect developer's judgement, trust over enforcement
 
-# The Storage Abstraction Layer
+## The Storage Abstraction Layer
 
 This code is the data storage abstraction:
 
@@ -373,7 +375,7 @@ All property methods unchanged. All application code stays unchanged.
 
 And, of course, if you want, you can switch to file-based storage, for example. Or even database if you prefer.
 
-# Zero dependency constructor
+## Zero dependency constructor
 
 The PoC version has the legacy constructor
 ```bash
@@ -398,7 +400,7 @@ It's a bit more code, but now it's as native as possible. In terms of performanc
 
 Why "printf" and not "echo"? Echo has some side effects, such as replacing ends of lines with spaces, for example, or interpreting some characters. Even though it might be useful to exploit this side effect in some cases (like using double echo for string concatenation), it can affect modified code and break it, and what we need is the exact file content.
 
-## Zero dependency constructor in bash 3
+### Zero dependency constructor in bash 3
 
 The main problem here is that that code above won't work for bash 3. In case of bash 3 zero dependency constructor will look like this:
 ```bash
@@ -616,7 +618,7 @@ Zero dependency constructor is considered the primary option, sed constructor is
 
 It would be also good to consider destructors if that's the case to save some memory.
 
-# Destructors
+## Destructors
 
 Even though destructors are not required in most cases, because scripts are short-living, you may need one if you are actively creating objects in the script.
 
@@ -631,7 +633,7 @@ __OBJECT__.destroy(){
 ```
 And this is it.
 
-# Static classes (utility classes)
+## Static classes (utility classes)
 
 You dont always want to create an object instance for everything. The best part about classes is that they have data and methods that work with this data. But when you don't really have data to work with, then you don't really need an instance.
 
@@ -655,7 +657,7 @@ system.stdout.printString(){
 
 As you can see, header file only has sourcing, so code gets added as-is, without creating an isolated namespace. Technically you can just source this class file wherether you want, don't even have to have a constructor file.
 
-# Bundling
+## Bundling
 
 When you develop multi-file application, you may want to eventually create a single application file that will contain all the code, including class definitions. This can be easily done with another script, let's call it a bundler.
 
@@ -663,15 +665,15 @@ What you essentially need to do is add every class you use, then add all constru
 
 ... To be continued
 
-# Best practices and recommendations
+## Best practices and recommendations
 
-## 1. Use longer and/or more unique placeholders in class files
+### 1. Use longer and/or more unique placeholders in class files
 
 Instead of "obj" use something like `__OBJECT__` or `__CLASS_NAME__` to avoid substring collisions. Short names look nicer, but they might be a part of something else rather than what you want it to be.
 
 If you decide to use short placeholders, then at least include "." in the end in both parts or string substitution.
 
-## 2. Organise constructors into library files
+### 2. Organise constructors into library files
 
 Instead of creating one constructor per class, add them all in one file, call it something like "mylib.h", and then source it in the application script like this:
 ```bash
@@ -679,7 +681,7 @@ Instead of creating one constructor per class, add them all in one file, call it
 ```
 It will make all you classes available all at once, but it obviously won't add any class code into current shell environment, it will only happen when object is instantiated.
 
-## 3. If you don't need data validation in setters and defaults in getters, use simplified property generation
+### 3. If you don't need data validation in setters and defaults in getters, use simplified property generation
 
 ```bash
 for property_name in "name" "weight" "color"
@@ -693,9 +695,9 @@ or something similar. It will reduce manual boilerplate when put after `__OBJECT
 
 ... To be continued...
 
-# Q&A
+## Q&A
 
-## Why not just use Python?
+### Why not just use Python?
 
 For a number of reasons:
 1. Overhead might be too high
@@ -703,11 +705,11 @@ For a number of reasons:
 3. Limited environment (no external programs possible to install or disk space is limited, for example)
 4. You have a big project written in bash and all you need is just a bit better organisation. In this case using ba.sh you can improve code base in small iterations, and may be later migrate to python if you want.
 
-## Is this production-ready?
+### Is this production-ready?
 
 Probably. It's not very different from many other bash scripts people use in production. I can't guarantee anything though. Use it at your own risk.
 
-## How do I handle errors?
+### How do I handle errors?
 
 Property setters return non-zero on validation failure:
 ```bash
@@ -725,17 +727,17 @@ mytask.priority = 5 || {
 }
 ```
 
-## Can I serialize object state?
+### Can I serialize object state?
 
 Yes, you can. How you do it is another question, but ba.sh doesn't stop you from implementing a method ".serialize" that will just dump properties array in a convenient form and method ".deserialize" that will load those values into a properties array. Implementation details have nothing to do with ba.sh though, it just adds organisation, you are free to do it how you like.
 
-## When should I use destructors?
+### When should I use destructors?
 
 It's basically two cases:
 1. You create enormous number of objects for some reason (in a loop, for example) and those objects are short-lived
 2. You have strict memory restrictions (normally not the case these days, even routers have enough memory to ignore destructors under normal work conditions).
 
-## What's the best way to debug and/or test a class?
+### What's the best way to debug and/or test a class?
 
 The best way is to treat a class file like a regular bash script (which it actually is, very likely shellcheck will be fine with it).
 
