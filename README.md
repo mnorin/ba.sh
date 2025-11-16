@@ -4,7 +4,7 @@ ba.sh is an object-oriented framework for bash. But it's not like any other OOP 
 
 ba.sh is the only bash-native OOP framework with zero dependencies and zero runtime overhead.
 
-Technically it may be considered a framework and a design pattern at the same time.
+Technically it may be considered a framework and a design pattern at the same time (Metaprogramming Factory).
 
 Disclaimer: Some examples may not work on bash 3, because I just don't have Mac and running bash 3 in Docker container is tedious. So, if something doesn't work, just raise an issue in Github.
 
@@ -29,7 +29,7 @@ Before I start explaining, let's see an example of a script that uses ba.sh
 
 example.sh
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 
 . obj.h
 
@@ -87,7 +87,7 @@ __OBJECT__.fileName(){
 }
 ```
 
-And this is it. This is a basic form of ba.sh code.
+And this is it. This is a basic form of ba.sh code. You can literally remember these 2 dozens of lines.
 
 Although there is so much more happening there. Let me explain.
 
@@ -106,7 +106,7 @@ Here is what ba.sh implements:
 | __2 November 2013__ | Maxim Norin (me) implemented PoC just for fun and [the article](https://mnorin.com/ob-ektno-orientirovannoe-programmirovanie-na-bash.html) was written explaining what it does and how it works. |
 | __19 January 2015__ | One of the readers (kstn) writes articles [one](https://kstn-debian.livejournal.com/16601.html) and [two](https://kstn-debian.livejournal.com/16727.html), where he explores PoC and makes quoting fixes to improve work with properties that represent strings and creates a destructor (which might be useful when you have a lot of objects to work with) |
 | __5 December 2016__ | Maxim Norin publishes examples as an answer to [this question](https://kstn-debian.livejournal.com/16727.html) about creating classes and objects on Stackoverflow |
-| __5 October 2019__ | Stackoverflow user TacB0sS adds an answer to the same question, telling that he implemented a terminal animation infrastructure using Maxim's pseudo-OOP concept (which looks pretty cool, by the way) |
+| __5 October 2019__ | Stackoverflow user TacB0sS adds an answer to the same question, telling that he implemented a terminal animation infrastructure using Maxim's pseudo-OOP concept (which looks pretty cool, by the way). Have a look [here](https://github.com/nu-art/dev-tools/tree/master/scripts/oos) |
 | __12 November 2025__ | Maxim implemented a zero-dependency constructor, which made ba.sh probably the only in the world fully bash-native pseudo-OOP framework with zero dependencies that is compatible with bash 3 and 4+ |
 
 Since the very first implementation of PoC ba.sh didn't change much.
@@ -679,6 +679,15 @@ When you develop multi-file application, you may want to eventually create a sin
 What you essentially need to do is add every class you use, then add all constructors, and then the application code, which can be automated with bash obviously.
 
 ... To be continued
+
+### Compressed bundle (highly optional)
+
+There is an option to create a compresed bundle that will unpack your code and execute it. It's not just applicable to ba.sh specifically, but you can make your scripts much smaller.
+
+It does have dependencies involved.
+
+... TBD
+(This will take me some time to implement, so, if you are interested, check in a week may be)
 
 ## Best practices and recommendations
 
