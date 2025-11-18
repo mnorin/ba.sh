@@ -697,7 +697,7 @@ Generally bash scripting best practices apply to ba.sh as well, but there are so
 
 Instead of "obj" use something like `__OBJECT__` or `__CLASS_NAME__` to avoid substring collisions. Short names look nicer, but they might be a part of something else rather than what you want it to be.
 
-If you decide to use short placeholders, then at least include "." in the end in both parts or string substitution.
+If you decide to use short placeholders, then at least include "." in the end in both parts of string substitution.
 
 ### 2. Organise constructors into library files
 
@@ -776,4 +776,18 @@ Or even better:
 . myclass.class
 
 # ... Some unit tests here
+```
+
+### How do I create a "property" that is an "object"?
+
+Use namespace prefix that will work as a sub-object reference. Like this:
+
+```bash
+person john
+address john.address
+```
+
+So, when you need to do something with address, you can access it via full address property name:
+```bash
+john.address.street = "221A Baker Street"
 ```
