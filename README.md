@@ -1,6 +1,6 @@
 # ba.sh
 
-ba.sh is an object-oriented framework for bash. But it's not like any other OOP framework for bash you've ever seen.
+ba.sh (pronounced "bash-with-a-dot") is an object-oriented framework for bash. But it's not like any other OOP framework for bash you've ever seen.
 
 ba.sh is the only bash-native OOP framework with zero dependencies and zero runtime overhead.
 
