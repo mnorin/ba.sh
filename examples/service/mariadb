@@ -1,0 +1,58 @@
+# MariaDB Service Configuration
+
+# import service constructor
+. service.h
+
+# Create service object
+service svc
+
+# Configuration
+svc.name = "MariaDB"
+svc.pidfile = "/var/run/mysqld/mysqld.pid"
+svc.user = "mysql"
+svc.logfile = "/var/log/mysql/error.log"
+svc.datadir = "/var/lib/mysql"
+
+# Paths
+svc.binary = "/usr/bin/mysqld_safe"
+svc.client = "/usr/bin/mysql"
+svc.admin = "/usr/bin/mysqladmin"
+
+# Start command
+svc.startCommand = "start_mariadb"
+start_mariadb() {
+    su - "$(svc.user)" -s /bin/bash -c "(svc.binary) --datadir=$(svc.datadir) --pid-file=$(svc.pidfile) >> $(svc.logfile) 2>&1 &"
+}
+
+# Stop command
+svc.stopCommand = "stop_mariadb"
+stop_mariadb() {
+    "$(svc.admin)" --defaults-file=/etc/mysql/debian.cnf shutdown 2>/dev/null
+    return $?
+}
+
+# Status check command
+svc.statusCommand = "check_mariadb"
+check_mariadb() {
+    "$(svc.admin)" --defaults-file=/etc/mysql/debian.cnf ping 2>/dev/null | grep -q "alive"
+}
+
+# Main Init Script Logic
+
+case "$1" in
+    start|stop|restart)
+        svc.${1}
+        ;;
+    reload|force-reload)
+        svc.reload
+        ;;
+    status)
+        svc.status
+        exit $?
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|reload|force-reload|status}"
+        exit 1
+        ;;
+esac
+

@@ -21,6 +21,7 @@ Disclaimer: Some examples may not work on bash 3, because I just don't have Mac 
 9. [Bundling](#bundling)
 10. [Best practices and recommendations](#best-practices-and-recommendations)
 11. [Q&A](#qa)
+12. [Todo list](#todo-list)
 ---
 
 ## Introduction
@@ -791,3 +792,7 @@ So, when you need to do something with address, you can access it via full addre
 ```bash
 john.address.street = "221A Baker Street"
 ```
+
+# Todo list
+1. Review constructor benchmark (add "time" results, git-bash)
+2. Finish bundling section (simple and compressed bundle)
