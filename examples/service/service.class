@@ -200,4 +200,3 @@ __SERVICE__.status(){
     fi
 }
 
-declare
