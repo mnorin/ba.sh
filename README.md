@@ -713,9 +713,9 @@ It will make all you classes available all at once, but it obviously won't add a
 ```bash
 for property_name in "name" "weight" "color"
 do
-  __OBJECT__.${property_name}(){
-    __OBJECT__.property "${property_name}" "$1" "$2"
-  }
+  eval "__OBJECT__.${property_name}(){
+    __OBJECT__.property "${property_name}" \"\$1\" \"\$2\"
+  }"
 done
 ```
 or something similar. It will reduce manual boilerplate when put after `__OBJECT__.property()`. This code will be executed once, when object is instantiated. Then you can redefine whatever getters/setters you actually need to be more complicated. This will effectively override existing property methods.
