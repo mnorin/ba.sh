@@ -717,6 +717,7 @@ do
     __OBJECT__.property "${property_name}" \"\$1\" \"\$2\"
   }"
 done
+unset property_name
 ```
 or something similar. It will reduce manual boilerplate when put after `__OBJECT__.property()`. This code will be executed once, when object is instantiated. Then you can redefine whatever getters/setters you actually need to be more complicated. This will effectively override existing property methods.
 
