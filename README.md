@@ -795,6 +795,16 @@ john.address.street = "221A Baker Street"
 ```
 Although this won't work exactly like this, you'll need to adjust underlying array name, as dots are not allowed in variables names. So, you'll need to make sure you convert `john.address_properties` to `john_address_properties`.
 
+Like this:
+```bash
+obj(){
+    local class_code=$(<obj.class)
+    local sanitized="${1//./_}"
+    local temp="${class_code//__OBJECT__/$1}"
+    . <(printf '%s' "${temp//__OBJECT___properties/${sanitized}_properties}")
+}
+```
+This is only needed for objects as properties, otherwise (if you use one level objects) you don't have to do it.
 
 # Todo list
 1. Review constructor benchmark (add "time" results, git-bash)
