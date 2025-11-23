@@ -793,6 +793,8 @@ So, when you need to do something with address, you can access it via full addre
 ```bash
 john.address.street = "221A Baker Street"
 ```
+Although this won't work exactly like this, you'll need to adjust underlying array name, as dots are not allowed in variables names. So, you'll need to make sure you convert `john.address_properties` to `john_address_properties`.
+
 
 # Todo list
 1. Review constructor benchmark (add "time" results, git-bash)
