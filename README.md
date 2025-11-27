@@ -39,7 +39,7 @@ obj myobject
 myobject.sayHello
 myobject.fileName = "file1"
 
-myobject.filename # prints "file1"
+myobject.fileName # prints "file1"
 ```
 
 Here you can see:
@@ -88,7 +88,7 @@ __OBJECT__.fileName(){
 }
 ```
 
-And this is it. This is a basic form of ba.sh code. You can literally remember these 2 dozens of lines.
+And this is it. This is a basic form of ba.sh code. You can literally remember these two dozen lines.
 
 Although there is so much more happening there. Let me explain.
 
@@ -96,7 +96,7 @@ Here is what ba.sh implements:
 1. Object constructor
 2. Property getters and setters
 3. Storage abstraction layer (helps with bash 3 and 4+ compatibility)
-4. Weak incapsulation
+4. Weak encapsulation
 5. Opportunities to include validations for data integrity into property setter
 6. ... Some other things
 
@@ -105,17 +105,17 @@ Here is what ba.sh implements:
 | Date | Event |
 | --- | --- |
 | __2 November 2013__ | Maxim Norin (me) implemented PoC just for fun and [the article](https://mnorin.com/ob-ektno-orientirovannoe-programmirovanie-na-bash.html) was written explaining what it does and how it works. |
-| __19 January 2015__ | One of the readers (kstn) writes articles [one](https://kstn-debian.livejournal.com/16601.html) and [two](https://kstn-debian.livejournal.com/16727.html), where he explores PoC and makes quoting fixes to improve work with properties that represent strings and creates a destructor (which might be useful when you have a lot of objects to work with) |
+| __19 January 2015__ | One of the readers (kstn) wrote articles [one](https://kstn-debian.livejournal.com/16601.html) and [two](https://kstn-debian.livejournal.com/16727.html), where he explores PoC and makes quoting fixes to improve work with properties that represent strings and creates a destructor (which might be useful when you have a lot of objects to work with) |
 | __5 December 2016__ | Maxim Norin publishes examples as an answer to [this question](https://kstn-debian.livejournal.com/16727.html) about creating classes and objects on Stackoverflow |
 | __5 October 2019__ | Stackoverflow user TacB0sS adds an answer to the same question, telling that he implemented a terminal animation infrastructure using Maxim's pseudo-OOP concept (which looks pretty cool, by the way). Have a look [here](https://github.com/nu-art/dev-tools/tree/master/scripts/oos) |
 | __12 November 2025__ | Maxim implemented a zero-dependency constructor, which made ba.sh probably the only in the world fully bash-native pseudo-OOP framework with zero dependencies that is compatible with bash 3 and 4+ |
 
 Since the very first implementation of PoC ba.sh didn't change much.
 
-The Philosophy behind ba.sh:
+The philosophy behind ba.sh:
 1. __Provide mechanism, not policy__ - Give tools, let developers decide constraints
 2. __Minimal but sufficient__ - No feature at all is better than rarely used feature
-3. __Leverage what exists__ - Use bash's natural behaviour as features
+3. __Leverage what exists__ - Use bash's natural behavior as features
 4. __Clarity over cleverness__ - Unless cleverness aids clarity
 5. __Pragmatic trade-offs__ - Accept limitations, don't fight the language
 
@@ -136,7 +136,7 @@ It gives ba.sh these advantages:
 
 ### 1. Encapsulation
 
-ba.sh implements a weak incapsulation based on namespacing. When object is created, it generates an array to store properties values and a set of functions with the same namespace that look like methods (thanks to dot notation).
+ba.sh implements a weak encapsulation based on namespacing. When object is created, it generates an array to store property values and a set of functions with the same namespace that look like methods (thanks to dot notation).
 
 ### 2. Instance isolation
 
@@ -183,11 +183,11 @@ Each property accessor is a gateway to the data. This provides:
 - Business rule validation
 - Default values
 
-Technically you can bypass validation simply writing to the object property array, but this is due global nature of bash environment. No complex limitation implemented, and it's a consious decision. It's a convention, and you can choose to follow it or not (it's better to follow if you want your code to do exactly what you want it to do).
+Technically you can bypass validation simply writing to the object property array, but this is due global nature of bash environment. No complex limitation implemented, and it's a conscious decision. It's a convention, and you can choose to follow it or not (it's better to follow if you want your code to do exactly what you want it to do).
 
 ### 4. Method dispatch
 
-Technically it's just calling behaviour on specific instances.
+Technically it's just calling behavior on specific instances.
 
 This is what it looks like:
 ```bash
@@ -216,7 +216,7 @@ How it works:
 2. "obj2 myobject" creates "myobject.methodFromObj2()"
 3. If both define the same method, the second overrides the first
 
-And this is it, the last definition wins, so order is important. This simplicity is intentional, it leverages natural bash behaviour.
+And this is it, the last definition wins, so order is important. This simplicity is intentional, it leverages natural bash behavior.
 
 If you want to make it look more like inheritance, you can simply modify a constructor like this:
 
@@ -273,7 +273,7 @@ Reasoning:
 - This avoids complexity of true inheritance
 - More appropriate for bash's capabilities
 
-### Weak incapsulation
+### Weak encapsulation
 
 What you can do:
 ```bash
@@ -339,7 +339,7 @@ obj.title(){
     fi
 }
 ```
-Note: In bash array subscripts, variables are evaluated automatically. Both [$title] and [title] work (title=0), though [$title] is more explicit. Also, in an arithmetic context (like array index) variable name might be resolved to its value (this is also why you should check if your variables shadowed properly where needed).
+Note: In bash array subscripts, variables are evaluated automatically. Both [$title] and [title] work (title=0), though [$title] is more explicit. Also, in an arithmetic context (like array index) variable name might be resolved to its value (this is also why you should check if your variables are shadowed properly where needed).
 
 Bash 4 implementation:
 
@@ -418,7 +418,7 @@ Why "printf" and not "echo"? Echo has some side effects, such as replacing ends 
 
 ### Zero dependency constructor in bash 3
 
-The main problem here is that that code above won't work for bash 3. In case of bash 3 zero dependency constructor will look like this:
+The main problem here is that the code above won't work for bash 3. In case of bash 3 zero dependency constructor will look like this:
 ```bash
 obj () 
 {
@@ -582,7 +582,7 @@ So, as you can see, the best compatibility option is also the fastest. If you wa
 
 When eval-based constructor used, risks are not that high in this specific case, unless you don't control class files content. If all classes are either written by you or verified, you should be safe.
 
-If you want to run you scripts on both bash 3 and 4+ with the safest option available for each of these versions, you will need to implement a compatibility layer for constructors that will look like this:
+If you want to run your scripts on both bash 3 and 4+ with the safest option available for each of these versions, you will need to implement a compatibility layer for constructors that will look like this:
 ```bash
 # File compatibility.h
 # 1. Determine the environment
@@ -628,7 +628,7 @@ matrix m1
 # ...
 ```
 
-Compatibility layer can be used for other things as well. In this case application level is prefered, as it requires sourcing just once. The whole idea is to keep the same interface, providing functions that do the same with functionality adjusted to specific bash version on lower level. The same, but different, but the same.
+Compatibility layer can be used for other things as well. In this case application level is preferred, as it requires sourcing just once. The whole idea is to keep the same interface, providing functions that do the same with functionality adjusted to specific bash version on lower level. The same, but different, but the same.
 
 Zero dependency constructor is considered the primary option, sed constructor is secondary. Make your decision during implementation. Zero-dependency constructor might be faster in most cases, but when it requires hundreds or thousands of objects, you may want to run some benchmarks.
 
@@ -651,7 +651,7 @@ And this is it.
 
 ## Static classes (utility classes)
 
-You dont always want to create an object instance for everything. The best part about classes is that they have data and methods that work with this data. But when you don't really have data to work with, then you don't really need an instance.
+You don't always want to create an object instance for everything. The best part about classes is that they have data and methods that work with this data. But when you don't really have data to work with, then you don't really need an instance.
 
 Here is how you create a static class:
 
@@ -671,7 +671,7 @@ system.stdout.printString(){
 }
 ```
 
-As you can see, header file only has sourcing, so code gets added as-is, without creating an isolated namespace. Technically you can just source this class file wherether you want, don't even have to have a constructor file.
+As you can see, header file only has sourcing, so code gets added as-is, without creating an isolated namespace. Technically you can just source this class file wherever you want, don't even have to have a constructor file.
 
 ## Bundling
 
@@ -683,12 +683,12 @@ What you essentially need to do is add every class you use, then add all constru
 
 ### Compressed bundle (highly optional)
 
-There is an option to create a compresed bundle that will unpack your code and execute it. It's not just applicable to ba.sh specifically, but you can make your scripts much smaller.
+There is an option to create a compressed bundle that will unpack your code and execute it. It's not just applicable to ba.sh specifically, but you can make your scripts much smaller.
 
 It does have dependencies involved.
 
 ... TBD
-(This will take me some time to implement, so, if you are interested, check in a week may be)
+(This will take me some time to implement, so, if you are interested, check in a week maybe)
 
 ## Best practices and recommendations
 
@@ -700,13 +700,13 @@ Instead of "obj" use something like `__OBJECT__` or `__CLASS_NAME__` to avoid su
 
 If you decide to use short placeholders, then at least include "." in the end in both parts of string substitution.
 
-### 2. Organise constructors into library files
+### 2. Organize constructors into library files
 
 Instead of creating one constructor per class, add them all in one file, call it something like "mylib.h", and then source it in the application script like this:
 ```bash
 . mylib.h
 ```
-It will make all you classes available all at once, but it obviously won't add any class code into current shell environment, it will only happen when object is instantiated.
+It will make all your classes available all at once, but it obviously won't add any class code into current shell environment, it will only happen when objects are instantiated.
 
 ### 3. If you don't need data validation in setters and defaults in getters, use simplified property generation
 
@@ -729,7 +729,7 @@ For a number of reasons:
 1. Overhead might be too high
 2. Python libraries tend to get outdated much faster than bash scripts
 3. Limited environment (no external programs possible to install or disk space is limited, for example)
-4. You have a big project written in bash and all you need is just a bit better organisation. In this case using ba.sh you can improve code base in small iterations, and may be later migrate to python if you want.
+4. You have a big project written in bash and all you need is just a bit better organisation. In this case using ba.sh you can improve code base in small iterations, and maybe later migrate to python if you want.
 
 ### Is this production-ready?
 
@@ -755,7 +755,7 @@ mytask.priority = 5 || {
 
 ### Can I serialize object state?
 
-Yes, you can. How you do it is another question, but ba.sh doesn't stop you from implementing a method ".serialize" that will just dump properties array in a convenient form and method ".deserialize" that will load those values into a properties array. Implementation details have nothing to do with ba.sh though, it just adds organisation, you are free to do it how you like.
+Yes, you can. How you do it is another question, but ba.sh doesn't stop you from implementing a method ".serialize", that will just dump properties array in a convenient form and method ".deserialize" that will load those values into a properties array. Implementation details have nothing to do with ba.sh though, it just adds organisation, you are free to do it how you like.
 
 ### When should I use destructors?
 
@@ -767,7 +767,7 @@ It's basically two cases:
 
 The best way is to treat a class file like a regular bash script (which it actually is, very likely shellcheck will be fine with it).
 
-You can either source it in your current shell to get `__OBJECT__<whatever>` in your current shell (which is probably easier), or just make it executable, add shabang in the first line ("#!/usr/bin/env bash"), set executable flag and stick your test/debug code after all the definitions. You don't have to instantiate an object.
+You can either source it in your current shell to get `__OBJECT__<whatever>` in your current shell (which is probably easier), or just make it executable, add shebang in the first line ("#!/usr/bin/env bash"), set executable flag and stick your test/debug code after all the definitions. You don't have to instantiate an object.
 
 Or even better:
 
@@ -789,11 +789,11 @@ person john
 address john.address
 ```
 
-So, when you need to do something with address, you can access it via full address property name:
+So, when you need to do something with address, you can access it via the full address property name:
 ```bash
 john.address.street = "221A Baker Street"
 ```
-Although this won't work exactly like this, you'll need to adjust underlying array name, as dots are not allowed in variables names. So, you'll need to make sure you convert `john.address_properties` to `john_address_properties`.
+Although this won't work exactly like this, you'll need to adjust underlying array name, as dots are not allowed in variable names. So, you'll need to make sure you convert `john.address_properties` to `john_address_properties`.
 
 Like this:
 ```bash
@@ -804,7 +804,7 @@ obj(){
     . <(printf '%s' "${temp//__OBJECT___properties/${sanitized}_properties}")
 }
 ```
-This is only needed for objects as properties, otherwise (if you use one level objects) you don't have to do it.
+This is only needed for objects as properties, otherwise (if you use single-level objects) you don't have to do it.
 
 # Todo list
 1. Review constructor benchmark (add "time" results, git-bash)
