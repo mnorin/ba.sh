@@ -809,3 +809,4 @@ This is only needed for objects as properties, otherwise (if you use single-leve
 # Todo list
 1. Review constructor benchmark (add "time" results, git-bash)
 2. Finish bundling section (simple and compressed bundle)
+3. Add an example for native serialisation and deserialisation as sourcing
