@@ -24,6 +24,9 @@ Disclaimer: Some examples may not work on bash 3, because I just don't have Mac 
 12. [Todo list](#todo-list)
 ---
 
+## Additional information
+1. [Conversation with Claude.ai about ba.sh](./docs/claude_ai_full_conversation.md)
+
 ## Introduction
 
 Before I start explaining, let's see an example of a script that uses ba.sh
