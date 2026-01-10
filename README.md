@@ -232,6 +232,16 @@ obj(){
 
 This way your object first inherits all parent's methods, and then object's own methods will be added.
 
+But the closest to inheritance would be this:
+
+The first line in child.class
+
+```bash
+parentClass __OBJECT__
+```
+
+This will add all methods from the parent, and then below you can implement the child methods. If you use this approach, you don't even have to add `__OBJECT__.property`, because it will be inherited from the "parent" or "grandparent". The chain goes like this - grandparent -> parent -> child.
+
 ### 6. Method overriding
 
 Method implementation can be performed either via composition or at runtime.
