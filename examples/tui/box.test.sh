@@ -1,13 +1,13 @@
 #!/bin/bash
-# test-box.sh - Test box.class functionality
+# test-box.sh - Test box.class.bash functionality
 
 # Load modules
-. cursor.class
-. screen.class
-. color.class
-. box.class
+. cursor.class.bash
+. screen.class.bash
+. color.class.bash
+. box.class.bash
 
-echo "Testing box.class..."
+echo "Testing box.class.bash..."
 echo "Press Enter to continue through tests"
 read
 

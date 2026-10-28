@@ -1,12 +1,12 @@
 #!/bin/bash
-# test-color.sh - Test color.class functionality
+# test-color.sh - Test color.class.bash functionality
 
 # Load modules
-. color.class
-. screen.class
-. cursor.class
+. color.class.bash
+. screen.class.bash
+. cursor.class.bash
 
-echo "Testing color.class..."
+echo "Testing color.class.bash..."
 echo "Press Enter to start tests"
 read
 

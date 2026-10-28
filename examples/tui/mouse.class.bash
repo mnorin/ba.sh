@@ -1,4 +1,4 @@
-# mouse.class - Mouse tracking and event handling for ba.sh TUI library
+# mouse.class.bash - Mouse tracking and event handling for ba.sh TUI library
 # No dependencies
 
 # Prevent double-loading

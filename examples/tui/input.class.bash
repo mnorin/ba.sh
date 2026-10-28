@@ -1,4 +1,4 @@
-# input.class - Keyboard input handling for ba.sh TUI library
+# input.class.bash - Keyboard input handling for ba.sh TUI library
 # No dependencies
 
 # Prevent double-loading

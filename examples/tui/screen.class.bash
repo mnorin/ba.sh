@@ -1,4 +1,4 @@
-# screen.class - Screen operations for ba.sh TUI library
+# screen.class.bash - Screen operations for ba.sh TUI library
 # No dependencies
 
 # Prevent double-loading

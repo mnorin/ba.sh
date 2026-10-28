@@ -1,4 +1,4 @@
-# color.class - Color and text formatting for ba.sh TUI library
+# color.class.bash - Color and text formatting for ba.sh TUI library
 # No dependencies
 
 # Prevent double-loading

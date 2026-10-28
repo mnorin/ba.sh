@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. matrix.h
+. matrix.lib.bash
 
 echo "=========================================="
 echo "ba.sh 2D Array (Matrix) Example"

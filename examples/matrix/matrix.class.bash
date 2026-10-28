@@ -1,4 +1,4 @@
-# matrix.class - 2D Array implementation
+# matrix.class.bash - 2D Array implementation
 
 __OBJECT___rows=0
 __OBJECT___cols=0

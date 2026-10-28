@@ -1,13 +1,13 @@
 examples/tui/
-├── cursor.class     # Primitives
-├── screen.class     # Primitives
-├── color.class      # Primitives
-├── box.class        # Depends on: cursor
-├── text.class       # Depends on: cursor, color
-├── mouse.class      # No dependencies
-├── input.class      # No dependencies
-├── menu.class       # Depends on: cursor, box, color, input
-├── button.class     # Depends on: cursor, box, color
-├── tui.h            # Loads all
+├── cursor.class.bash     # Primitives
+├── screen.class.bash     # Primitives
+├── color.class.bash      # Primitives
+├── box.class.bash        # Depends on: cursor
+├── text.class.bash       # Depends on: cursor, color
+├── mouse.class.bash      # No dependencies
+├── input.class.bash      # No dependencies
+├── menu.class.bash       # Depends on: cursor, box, color, input
+├── button.class.bash     # Depends on: cursor, box, color
+├── tui.lib.bash            # Loads all
 └── README.md
 

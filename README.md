@@ -35,7 +35,7 @@ example.sh
 ```bash
 #!/usr/bin/env bash
 
-. obj.h
+. obj.lib.bash
 
 obj myobject
 
@@ -53,15 +53,15 @@ Here you can see:
 
 What's behind the scenes? Two small files
 
-obj.h
+obj.lib.bash
 ```bash
 obj(){
-    local class_code=$(<obj.class)
+    local class_code=$(<obj.class.bash)
     . <(printf '%s' "${class_code//__OBJECT__/$1}")
 }
 ```
 
-obj.class
+obj.class.bash
 ```bash
 __OBJECT___properties=()
 
@@ -206,8 +206,8 @@ Ability to combine methods from different classes in one object.
 
 Example:
 ```bash
-obj myobject   # Add methods from obj.class
-obj2 myobject  # Add methods from obj2.class
+obj myobject   # Add methods from obj.class.bash
+obj2 myobject  # Add methods from obj2.class.bash
 
 # myobject has methods from both classes
 myobject.methodFromObj1
@@ -225,8 +225,8 @@ If you want to make it look more like inheritance, you can simply modify a const
 
 ```bash
 obj(){
-    . <(sed "s/__OBJECT__/$1/g" parent.class)
-    . <(sed "s/__OBJECT__/$1/g" obj.class)
+    . <(sed "s/__OBJECT__/$1/g" parent.class.bash)
+    . <(sed "s/__OBJECT__/$1/g" obj.class.bash)
 }
 ```
 
@@ -234,7 +234,7 @@ This way your object first inherits all parent's methods, and then object's own 
 
 But the closest to inheritance would be this:
 
-The first line in child.class
+The first line in child.class.bash
 
 ```bash
 parentClass __OBJECT__
@@ -409,7 +409,7 @@ And, of course, if you want, you can switch to file-based storage, for example. 
 The PoC version has the legacy constructor
 ```bash
 obj(){
-    . <(sed "s/__OBJECT__/$1/g" obj.class)
+    . <(sed "s/__OBJECT__/$1/g" obj.class.bash)
 }
 ```
 
@@ -421,7 +421,7 @@ Here is how:
 
 ```bash
 obj(){
-    local class_code=$(<obj.class)
+    local class_code=$(<obj.class.bash)
     . <(printf '%s' "${class_code//__OBJECT__/$1}")
 }
 ```
@@ -435,7 +435,7 @@ The main problem here is that the code above won't work for bash 3. In case of b
 ```bash
 obj () 
 {
-    local class_code=$(<obj.class);
+    local class_code=$(<obj.class.bash);
     local generated_code="${class_code//obj/$1}";
     eval "$generated_code"
 }
@@ -597,7 +597,7 @@ When eval-based constructor used, risks are not that high in this specific case,
 
 If you want to run your scripts on both bash 3 and 4+ with the safest option available for each of these versions, you will need to implement a compatibility layer for constructors that will look like this:
 ```bash
-# File compatibility.h
+# File compatibility.lib.bash
 # 1. Determine the environment
 BASH_MAJOR_VERSION=${BASH_VERSION%%.*}
 
@@ -617,14 +617,14 @@ fi
 
 And then in a constructor you can just call `_source_code()`
 ```bash
-. compatibility.h
+. compatibility.lib.bash
 # Yes, I created an easy to use 2-dimensional
 # array in bash using ba.sh
 matrix() {
-    local class_code=$(<matrix.class);
+    local class_code=$(<matrix.class.bash);
     local generated_code="${class_code//matrix/$1}";
     
-    # Use the function defined in compatibility.h
+    # Use the function defined in compatibility.lib.bash
     _source_code "$generated_code" 
 }
 ```
@@ -634,9 +634,9 @@ Example:
 ```bash
 #!/bin/bash
 # Source the compatibility file first.
-. compatibility.h
+. compatibility.lib.bash
 
-. matrix.h
+. matrix.lib.bash
 matrix m1
 # ...
 ```
@@ -668,12 +668,12 @@ You don't always want to create an object instance for everything. The best part
 
 Here is how you create a static class:
 
-File system.h
+File system.lib.bash
 ```bash
-. system.class
+. system.class.bash
 ```
 
-File system.class
+File system.class.bash
 ```bash
 system.stdout.printValue(){
     echo $($@)
@@ -715,9 +715,9 @@ If you decide to use short placeholders, then at least include "." in the end in
 
 ### 2. Organize constructors into library files
 
-Instead of creating one constructor per class, add them all in one file, call it something like "mylib.h", and then source it in the application script like this:
+Instead of creating one constructor per class, add them all in one file, call it something like "mylib.lib.bash", and then source it in the application script like this:
 ```bash
-. mylib.h
+. mylib.lib.bash
 ```
 It will make all your classes available all at once, but it obviously won't add any class code into current shell environment, it will only happen when objects are instantiated.
 
@@ -733,6 +733,12 @@ done
 unset property_name
 ```
 or something similar. It will reduce manual boilerplate when put after `__OBJECT__.property()`. This code will be executed once, when object is instantiated. Then you can redefine whatever getters/setters you actually need to be more complicated. This will effectively override existing property methods.
+
+### 4. File naming and tooling
+
+Ba.sh is a framework, and does not dictate how to name or where to place your files. However, it's possible that your project uses tooling (e.g. IDE's, shellcheck, the bats testing framework, etc) that evaluates files based upon shebangs or file extensions. Just as Ba.sh is not meant to fight against bash, you do not need to fight your tooling.
+
+Shebangs indicating bash have been elided from these examples to keep them short, but there should be no problem having them in the class and constructor/library files. The examples here use file extensions as a convention to indicate the class and constructor/library files, you can choose a different convention. Note that `*.class` and `*.h` extensions may be mistaken for Java or C/++ material, and the `*.bash` extension indicates a shell script that is more bash-specific than `*.sh`.
 
 ## Q&A
 
@@ -788,7 +794,7 @@ Or even better:
 #!/usr/bin/env bash
 
 # My test suite in the file named "myclass.test.sh"
-. myclass.class
+. myclass.class.bash
 
 # ... Some unit tests here
 ```
@@ -811,7 +817,7 @@ Although this won't work exactly like this, you'll need to adjust underlying arr
 Like this:
 ```bash
 obj(){
-    local class_code=$(<obj.class)
+    local class_code=$(<obj.class.bash)
     local sanitized="${1//./_}"
     local temp="${class_code//__OBJECT__/$1}"
     . <(printf '%s' "${temp//__OBJECT___properties/${sanitized}_properties}")

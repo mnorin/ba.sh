@@ -2,11 +2,11 @@
 # nano.sh - A minimal text editor using ba.sh TUI library
 
 # Load TUI modules
-. ../tui/cursor.class
-. ../tui/screen.class
-. ../tui/color.class
-. ../tui/box.class
-. ../tui/input.class
+. ../tui/cursor.class.bash
+. ../tui/screen.class.bash
+. ../tui/color.class.bash
+. ../tui/box.class.bash
+. ../tui/input.class.bash
 
 # Editor configuration
 EDITOR_NAME="nano.sh"

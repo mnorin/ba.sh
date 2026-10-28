@@ -1,13 +1,13 @@
 #!/bin/bash
-# mouse.test.sh - Test mouse.class functionality
+# mouse.test.sh - Test mouse.class.bash functionality
 
 # Load modules
-. cursor.class
-. screen.class
-. color.class
-. box.class
-. input.class
-. mouse.class
+. cursor.class.bash
+. screen.class.bash
+. color.class.bash
+. box.class.bash
+. input.class.bash
+. mouse.class.bash
 
 # Setup
 tui.screen.alt

@@ -1,4 +1,4 @@
-# cursor.class - Cursor control primitives for ba.sh TUI library
+# cursor.class.bash - Cursor control primitives for ba.sh TUI library
 # No dependencies
 
 # Prevent double-loading

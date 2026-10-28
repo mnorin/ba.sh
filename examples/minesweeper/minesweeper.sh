@@ -2,12 +2,12 @@
 # minesweeper.sh - Classic Minesweeper game using ba.sh TUI library
 
 # Load TUI modules
-. ../tui/cursor.class
-. ../tui/screen.class
-. ../tui/color.class
-. ../tui/box.class
-. ../tui/input.class
-. ../tui/mouse.class
+. ../tui/cursor.class.bash
+. ../tui/screen.class.bash
+. ../tui/color.class.bash
+. ../tui/box.class.bash
+. ../tui/input.class.bash
+. ../tui/mouse.class.bash
 
 # Game configuration
 GRID_ROWS=10

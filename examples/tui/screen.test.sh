@@ -1,11 +1,11 @@
 #!/bin/bash
-# test-screen.sh - Test screen.class functionality
+# test-screen.sh - Test screen.class.bash functionality
 
 # Load modules
-. screen.class
-. cursor.class
+. screen.class.bash
+. cursor.class.bash
 
-echo "Testing screen.class..."
+echo "Testing screen.class.bash..."
 echo "Press Enter to continue through tests"
 read
 

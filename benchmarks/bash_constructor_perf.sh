@@ -8,7 +8,7 @@ echo "Bash version: ${BASH_VERSION}"
 echo ""
 
 # Create test class file (bash 3 compatible)
-cat > test.class << 'EOF'
+cat > test.class.bash << 'EOF'
 __TEST___properties=()
 
 __TEST__.property(){
@@ -66,18 +66,18 @@ EOF
 
 # Constructor 1: sed (legacy)
 test_sed(){
-    . <(sed "s/__TEST__/$1/g" test.class)
+    . <(sed "s/__TEST__/$1/g" test.class.bash)
 }
 
 # Constructor 2: Pure bash 4+ (printf + process substitution)
 test_bash4(){
-    local class_code=$(<test.class)
+    local class_code=$(<test.class.bash)
     . <(printf '%s' "${class_code//__TEST__/$1}")
 }
 
 # Constructor 3: Bash 3 compatible (eval)
 test_bash3(){
-    local class_code=$(<test.class)
+    local class_code=$(<test.class.bash)
     local generated_code="${class_code//__TEST__/$1}"
     eval "$generated_code"
 }
@@ -263,7 +263,7 @@ for count in 10 100 1000; do
 done
 
 # Cleanup
-rm -f test.class
+rm -f test.class.bash
 
 echo "=========================================="
 echo "SUMMARY"

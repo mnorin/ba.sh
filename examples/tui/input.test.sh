@@ -1,12 +1,12 @@
 #!/bin/bash
-# input.test.sh - Test input.class functionality
+# input.test.sh - Test input.class.bash functionality
 
 # Load modules
-. cursor.class
-. screen.class
-. color.class
-. box.class
-. input.class
+. cursor.class.bash
+. screen.class.bash
+. color.class.bash
+. box.class.bash
+. input.class.bash
 
 # Setup
 tui.screen.alt

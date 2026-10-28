@@ -1,9 +1,9 @@
-# box.class - Box drawing primitives for ba.sh TUI library
-# Dependencies: cursor.class
+# box.class.bash - Box drawing primitives for ba.sh TUI library
+# Dependencies: cursor.class.bash
 
-# Load dependencies if you only source box.class
-# When you already loaded cursor.class, you won't need this like below
-# . cursor.class
+# Load dependencies if you only source box.class.bash
+# When you already loaded cursor.class.bash, you won't need this like below
+# . cursor.class.bash
 
 # Prevent double-loading
 [[ -n $TUI_BOX_LOADED ]] && return

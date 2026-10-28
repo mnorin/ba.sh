@@ -1,7 +1,7 @@
 # MariaDB Service Configuration
 
 # import service constructor
-. service.h
+. service.lib.bash
 
 # Create service object
 service svc

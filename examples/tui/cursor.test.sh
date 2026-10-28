@@ -1,11 +1,11 @@
 #!/bin/bash
-# test-cursor.sh - Test cursor.class functionality
+# test-cursor.sh - Test cursor.class.bash functionality
 
 # Load modules
-. cursor.class
-. screen.class
+. cursor.class.bash
+. screen.class.bash
 
-echo "Testing cursor.class..."
+echo "Testing cursor.class.bash..."
 echo "Press Enter to continue through tests"
 read
 

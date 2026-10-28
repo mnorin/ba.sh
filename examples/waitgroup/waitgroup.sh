@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. waitgroup.h
+. waitgroup.lib.bash
 
 waitgroup wg
 wg.limit = 5
